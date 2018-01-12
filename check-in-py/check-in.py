@@ -96,7 +96,7 @@ if __name__ == "__main__":
     for person in persons:
         if person["Checked"] == False:
             receivers.append(person["SSN"] + "@seekasia.com")
-            msg += "@" + person["SSN"] + " "
+            msg += "<@" + person["SSN"].lower() + "> "
     print('receivers:' + msg)
     if len(receivers) > 0:
         print('start reminder...')

@@ -15,3 +15,5 @@ def slack_send(msg):
 		print('send slack error:' + response["error"])
 	else:
 		print 'send slack finished...'  
+
+#response = sc.api_call("chat.postMessage", channel="#rc_monitor", text="<@jacky_liao>, <@miragelu>, <@candu>, <@mervynlin>")
