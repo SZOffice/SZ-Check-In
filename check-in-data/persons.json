@@ -1,0 +1,25 @@
+[
+    {'SSN': 'CanDu', 'Checked': False},
+    {'SSN': 'LawenShu', 'Checked': False},
+    {'SSN': 'JackyLiao', 'Checked': False},
+    {'SSN': 'SamWang', 'Checked': False},
+    {'SSN': 'KevinMa', 'Checked': False},
+    
+    {'SSN': 'EchoLiao', 'Checked': False},
+    {'SSN': 'DarrenWu', 'Checked': False},
+    {'SSN': 'WolfZhang', 'Checked': False},
+    {'SSN': 'LettyXia', 'Checked': False},
+    
+    {'SSN': 'MirageLu', 'Checked': False},
+    {'SSN': 'MervynLin', 'Checked': False},
+    {'SSN': 'JohnnyZhu', 'Checked': False},
+    {'SSN': 'JennieXia', 'Checked': False},
+    
+    {'SSN': 'CheneyChen', 'Checked': False},
+    {'SSN': 'TaileXu', 'Checked': False},
+    {'SSN': 'SunnyWang', 'Checked': False},
+    {'SSN': 'JockyXie', 'Checked': False},
+    
+    {'SSN': 'KeiraWu', 'Checked': False},
+    {'SSN': 'KidyLuo', 'Checked': False}
+]
