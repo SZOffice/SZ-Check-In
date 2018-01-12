@@ -6,7 +6,7 @@ from email.header import Header
 # 第三方 SMTP 服务
 mail_host="smtp.126.com"  #设置服务器
 mail_user="ifelse01@126.com"    #用户名
-mail_pass="012345"   #口令 
+mail_pass="******"   #口令 
 
 sender = 'ifelse01@126.com'
 receivers = ['miragelu@seekasia.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
