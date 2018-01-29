@@ -12,7 +12,6 @@
     
     {'SSN': 'MirageLu', 'Checked': False},
     {'SSN': 'MervynLin', 'Checked': False},
-    {'SSN': 'JohnnyZhu', 'Checked': False},
     {'SSN': 'JennieXia', 'Checked': False},
     
     {'SSN': 'CheneyChen', 'Checked': False},
@@ -20,6 +19,6 @@
     {'SSN': 'SunnyWang', 'Checked': False},
     {'SSN': 'JockyXie', 'Checked': False},
     
-    {'SSN': 'KeiraWu', 'Checked': False},
-    {'SSN': 'KidyLuo', 'Checked': False}
+    {'SSN': 'KidyLuo', 'Checked': False},
+    {'SSN': 'CrystalZhong', 'Checked': False}
 ]
