@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-  
-import sys, time
+import os, sys, time
 from datetime import datetime
 import pypyodbc
 import sendmail
@@ -63,7 +63,12 @@ if __name__ == "__main__":
     leaves = eval(open_file(leaveFilePath))	
     #print(leaves)
     
-    tablename = 'USREINFO'
+    if not os.path.exists(dataFilePath):
+        try:
+            sendmail.mail_send_admin("check in system database file not exists")
+        except Exception, e:
+            print('send email error:' + str(e))
+        sys.exit(0)
     conn = mdb_conn(dataFilePath)
     cur = conn.cursor()
     
