@@ -27,24 +27,42 @@ def mail_send2(receivers):
     
 
 def mail_send(receivers):  
-	print 'send mail start...'  
-	msg = MIMEText(body, 'plain', 'utf-8')
-	msg["From"] = 'SZ-OA@seekasia.com'  
-	msg["To"] = ""  
-	msg["Subject"] = "打卡提醒"  
-	smtpObj = smtplib.SMTP("10.101.1.52")
-	smtpObj.sendmail(sender, receivers, msg.as_string())  
-	smtpObj.quit()  
-	print 'send mail finished...'
+    print 'send mail start...'  
+    msg = MIMEText(body, 'plain', 'utf-8')
+    msg["From"] = 'SZ-OA@seekasia.com'  
+    msg["To"] = ""  
+    msg["Subject"] = "打卡提醒"  
+    smtpObj = smtplib.SMTP("10.101.1.52")
+    smtpObj.sendmail(sender, receivers, msg.as_string())  
+    smtpObj.quit()  
+    print 'send mail finished...'
 
-	
+def mail_send_report(receivers, message, attachFilePath):  
+    from email.mime.multipart import MIMEMultipart
+    print 'send mail start...'  
+    msg = MIMEMultipart()
+    msg["From"] = Header('SZ-OA@seekasia.com', 'utf-8')
+    msg["To"] = Header('check in report', 'utf-8')
+    msg["Subject"] = Header('check in report', 'utf-8')
+    msg.attach(MIMEText(message, 'plain', 'utf-8'))
+    
+    att1 = MIMEText(open(attachFilePath, 'rb').read(), 'base64', 'utf-8')
+    att1["Content-Type"] = 'application/octet-stream'
+    att1["Content-Disposition"] = 'attachment; filename="check_in_report.html"'
+    msg.attach(att1)
+
+    smtpObj = smtplib.SMTP("10.101.1.52")
+    smtpObj.sendmail(sender, receivers, msg.as_string())  
+    smtpObj.quit()  
+    print 'send mail finished...'
+    
 def mail_send_admin(message):  
-	print 'send mail to admin start...'  
-	msg = MIMEText(message, 'plain', 'utf-8')
-	msg["From"] = 'SZ-OA@seekasia.com'  
-	msg["To"] = "miragelu@seekasia.com"  
-	msg["Subject"] = "打卡提醒出错"  
-	smtpObj = smtplib.SMTP("10.101.1.52")
-	smtpObj.sendmail(sender, ['miragelu@seekasia.com', 'candu@seekasia.com', 'echoliao@seekasia.com'], msg.as_string())  
-	smtpObj.quit()  
-	print 'send mail finished...'  
+    print 'send mail to admin start...'  
+    msg = MIMEText(message, 'plain', 'utf-8')
+    msg["From"] = 'SZ-OA@seekasia.com'  
+    msg["To"] = "miragelu@seekasia.com"  
+    msg["Subject"] = "打卡提醒出错"  
+    smtpObj = smtplib.SMTP("10.101.1.52")
+    smtpObj.sendmail(sender, ['miragelu@seekasia.com', 'candu@seekasia.com', 'echoliao@seekasia.com'], msg.as_string())  
+    smtpObj.quit()  
+    print 'send mail finished...'  

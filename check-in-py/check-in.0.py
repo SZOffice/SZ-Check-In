@@ -57,7 +57,10 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if not args:
         print("not args")
-	
+        month = 0
+    else:
+        month = args[0]
+        
     persons = eval(open_file(personFilePath))
     #print(persons)
     leaves = eval(open_file(leaveFilePath))	

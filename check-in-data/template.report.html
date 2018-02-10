@@ -1,0 +1,245 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <script src="http://www.css88.com/doc/underscore/underscore-min.js"></script>
+    
+<style type="text/css">
+table.altrowstable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+table.altrowstable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+    min-width: 40px;
+}
+table.altrowstable td {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+.oddrowcolor{
+	background-color:#d4e3e5;
+}
+.evenrowcolor{
+	background-color:#c3dde0;
+}
+td div{
+    text-align: center;
+}
+.checkout {
+    background-color: red;
+}
+.checkin {
+}
+.holiday {
+    background-color: yellow;
+}
+</style>
+</head>
+<body>
+<div id="app" style="padding:20px 10px">
+    <div>
+        <span>holiday: </span><span style="width:40px; height:20px; display: inline-block; text-align:center;" class="holiday">○</span>
+    </div>
+    <div>
+        <span>checkin: </span><span style="width:40px; height:20px; display: inline-block; text-align:center;" class="checkin">✔</span>
+    </div>
+    <div>
+        <span>checkout: </span><span style="width:40px; height:20px; display: inline-block; text-align:center;" class="checkout">✘</span>
+    </div>
+    <div style="padding:20px 0 0">
+        <select v-model="sel_year">
+            <option v-for="year in list_year">{{ '{{year}}' }}</option>
+        </select>
+        <select v-model="sel_month" v-on:change="selMonth()">
+            <option v-for="month in list_month">{{ '{{month}}' }}</option>
+        </select>
+        <select v-model="sel_day" v-on:change="selDay()">
+            <option v-for="day in list_day">{{ '{{day}}' }}</option>
+        </select>
+        <select v-model="sel_person" v-on:change="selPerson()">
+            <option v-for="person in list_person">{{ '{{person}}' }}</option>
+        </select>
+        <select v-model="sel_type" v-on:change="search()">
+            <option>All</option>
+            <option>Check out</option>
+        </select>
+    </div>
+    <table class="altrowstable" style="margin-top:10px;">
+    <tr>
+        <th></th>
+        <th v-for="day in list_day" v-if="day != 'All'">{{ '{{day}}' }}</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th v-for="week in list_week">{{ '{{week}}' }}</th>
+    </tr>
+    <tr class="evenrowcolor" v-for="(data, key) in list_data" v-if="key != 'All'">
+        <td>{{ '{{key}}' }}</td>        
+        <td v-for="day in list_day" v-if="day != 'All'" >
+            <div class="holiday" v-if="data[day]==0 || data[day] == 1">○</div>
+            <div class="checkin" v-else-if="data[day]==2 || data[day] == 4">✔</div>
+            <div class="checkout" v-else-if="data[day]==3 || data[day] == 5">✘</div>
+            <div class="holiday" v-if="data[day]==0 || data[day] == 1">○</div>
+            <div class="checkin" v-else-if="data[day]==2 || data[day] == 3">✔</div>
+            <div class="checkout" v-else-if="data[day]==4 || data[day] == 5">✘</div>
+        </td>
+    </tr>
+    </table>
+</div>
+<script>
+
+var checkin = {{checkin}}
+var checkyear = ""
+var checkmonth = ""
+var years = _.keys(checkin)
+
+var Main = {
+    data() {
+        return {
+            list_all: checkin,
+            list_data: [],
+            list_week: [],
+            list_year: [],
+            sel_year: checkyear,
+            list_month: [],
+            sel_month: checkmonth,
+            list_day: [],
+            sel_day: "All",
+            list_person: [],
+            sel_person: "",
+            sel_type: "All"
+        };
+    },
+    mounted() {
+        this.selyear()
+        this.selPerson()
+        this.search()
+    },
+    methods: {
+        loadMonth() {
+            console.log(this.sel_year)
+            return _.keys(checkin[this.sel_year])
+        },
+        loadDay() {
+            var temp = _.sortBy(_.keys(checkin[this.sel_year][this.sel_month]), function(num){ return parseInt(num); })
+            return ["All"].concat(temp)
+        },
+        loadPerson() {
+            temp = []
+            temp.push("All")
+            _.each(checkin[this.sel_year][this.sel_month][this.list_day[1]], function(index, item){
+                if(!_.contains(["AM", "PM", "Weekindex"], item)) {
+                    temp.push(item)
+                }
+            })
+            return temp
+        },
+        selyear() {
+            this.list_year = _.keys(checkin)
+            if (!_.contains(this.list_year, this.sel_year)) {
+                this.sel_year = this.list_year[0]
+            }
+            this.selMonth()
+        },
+        selMonth() {
+            this.list_month = this.loadMonth()
+            if (!_.contains(this.list_month, this.sel_month)) {
+                this.sel_month = this.list_month[0]
+            }
+            this.selDay()
+        },
+        selDay() {
+            this.list_day = this.loadDay()
+            if (!_.contains(this.list_day, this.sel_day)) {
+                this.sel_day = this.list_day[0]
+            }
+            this.search()
+        },
+        selPerson() {
+            this.list_person = this.loadPerson()        
+            if (!_.contains(this.list_person, this.sel_person)) {
+                this.sel_person = this.list_person[0]
+            }
+            this.search()
+        },
+        search() {
+            console.log(this.sel_person);
+            var list = checkin[this.sel_year][this.sel_month];
+            if (this.sel_day != "All") {
+                t = list[this.sel_day]
+                list = {}
+                list[this.sel_day] = t
+            }
+            
+            var vue = this;
+            temp = {}            
+            _.each(vue.list_person, function(person,  index){
+                if (person != "All" && (vue.sel_person == "All" || vue.sel_person == person)) {
+                    temp[person] = {}
+                    _.each(vue.list_day, function(day, index_day){
+                        if (day != "All" && (vue.sel_day == "All" || vue.sel_day == day)) {
+                            type = list[day][person] 
+                            if (vue.sel_type == "Check out" && !_.contains([3,4,5], type)) {
+                                temp[person][day] = 99
+                            } else {
+                                temp[person][day] = type 
+                            }
+                        }
+                    })
+                }
+            })
+            console.log(temp)
+            this.list_data = temp;
+            
+            vue.list_week = []
+            _.each(vue.list_day, function(day, index_day){
+                if (day != "All" && (vue.sel_day == "All" || vue.sel_day == day)) {
+                    vue.list_week.push(getWeek(list[day]["Weekindex"]))
+                }
+            })
+            
+            function getWeek(index) {
+                week = ""
+                switch(index){
+                    case 0:
+                        week = "一"
+                        break;
+                    case 1:
+                        week = "二"
+                        break;
+                    case 2:
+                        week = "三"
+                        break;
+                    case 3:
+                        week = "四"
+                        break;
+                    case 4:
+                        week = "五"
+                        break;
+                    case 5:
+                        week = "六"
+                        break;
+                    case 6:
+                        week = "日"
+                        break;
+                }
+                return week;
+            }
+        }
+    }
+}
+
+var Ctor = Vue.extend(Main)
+var vue = new Ctor({
+    //router
+}).$mount('#app')
+</script>
+</html>
