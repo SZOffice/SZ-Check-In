@@ -6,7 +6,7 @@ sc = SlackClient("XXXXX")
 msg = "今天都打卡了"
 
 def slack_send(msg):  
-	print 'send slack start...'
+	print('send slack start...')
 	response = sc.api_call(
 	  "chat.postMessage",
 	  channel="#sz-check-in",
@@ -15,6 +15,6 @@ def slack_send(msg):
 	if response["error"] != "":
 		print('send slack error:' + response["error"])
 	else:
-		print 'send slack finished...'  
+		print('send slack finished...')
 
 #response = sc.api_call("chat.postMessage", channel="#rc_monitor", text="<@jacky_liao>, <@miragelu>, <@candu>, <@mervynlin>")

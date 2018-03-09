@@ -13,7 +13,7 @@ receivers = ['miragelu@seekasia.com']  # 接收邮件，可设置为你的QQ邮�
 body = "亲， \n\n  您今天上班未打卡， 打个卡去呗... \n\n  谢谢配合。 \n\nSincerely, \n\nCDC Office"
 
 def mail_send2(receivers):  
-    print 'send mail start...'  
+    print('send mail start...' )
     msg = MIMEText(body, 'plain', 'utf-8')
     msg["From"] = sender  
     msg["To"] = ""  
@@ -23,11 +23,11 @@ def mail_send2(receivers):
     smtpObj.login(mail_user, mail_pass) 
     smtpObj.sendmail(sender, receivers, msg.as_string())  
     smtpObj.quit()  
-    print 'send mail finished...'  
+    print('send mail finished...')
     
 
 def mail_send(receivers):  
-    print 'send mail start...'  
+    print('send mail start...') 
     msg = MIMEText(body, 'plain', 'utf-8')
     msg["From"] = 'SZ-OA@seekasia.com'  
     msg["To"] = ""  
@@ -35,11 +35,11 @@ def mail_send(receivers):
     smtpObj = smtplib.SMTP("10.101.1.52")
     smtpObj.sendmail(sender, receivers, msg.as_string())  
     smtpObj.quit()  
-    print 'send mail finished...'
+    print('send mail finished...')
 
 def mail_send_report(receivers, message, attachFilePath):  
     from email.mime.multipart import MIMEMultipart
-    print 'send mail start...'  
+    print('send mail start...')  
     msg = MIMEMultipart()
     msg["From"] = Header('SZ-OA@seekasia.com', 'utf-8')
     msg["To"] = Header('check in report', 'utf-8')
@@ -54,10 +54,10 @@ def mail_send_report(receivers, message, attachFilePath):
     smtpObj = smtplib.SMTP("10.101.1.52")
     smtpObj.sendmail(sender, receivers, msg.as_string())  
     smtpObj.quit()  
-    print 'send mail finished...'
+    print('send mail finished...')
     
 def mail_send_admin(message):  
-    print 'send mail to admin start...'  
+    print('send mail to admin start...')
     msg = MIMEText(message, 'plain', 'utf-8')
     msg["From"] = 'SZ-OA@seekasia.com'  
     msg["To"] = "miragelu@seekasia.com"  
@@ -65,4 +65,4 @@ def mail_send_admin(message):
     smtpObj = smtplib.SMTP("10.101.1.52")
     smtpObj.sendmail(sender, ['miragelu@seekasia.com', 'candu@seekasia.com', 'echoliao@seekasia.com'], msg.as_string())  
     smtpObj.quit()  
-    print 'send mail finished...'  
+    print('send mail finished...' )

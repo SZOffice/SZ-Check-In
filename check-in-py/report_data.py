@@ -3,13 +3,11 @@ import win32com.client
 import os, sys, time
 from datetime import datetime
 import calendar
-import sendmail
-import sendslack
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 now = datetime.now()
 baseDir = 'check-in-data\\'
+if not os.path.exists(baseDir):
+    baseDir = sys.path[0] + '\\..\\check-in-data\\'
 personFilePath = baseDir + 'persons.json'
 leaveFilePath = baseDir + 'leave.json'
 checkInFilePath = baseDir + ('checkin.%s.json' % now.strftime('%Y%m%d'))
@@ -36,8 +34,8 @@ def getCheckInData(list_date):
                 syear = str(year)
                 smonth = str(month)
                 sday = str(day)
-                if list_date.has_key(syear) and list_date[syear].has_key(smonth) and list_date[syear][smonth].has_key(sday):
-                    if (hour > 1 and hour < 12) or (hour == 12 and minute<30):
+                if syear in list_date and smonth in list_date[syear] and sday in list_date[syear][smonth]:
+                    if hour < 12 or (hour == 12 and minute<=30):
                         list_date[syear][smonth][sday]["AM"].append(idNum)
                     if hour > 12 or (hour == 12 and minute>30):
                         list_date[syear][smonth][sday]["PM"].append(idNum)
@@ -60,34 +58,26 @@ def open_file(path):
         file_object.close( )
     return context
 
-if __name__ == "__main__":
-    args = sys.argv[1:]
-    if not args:
-        print("not args")
+def getReportData(check_year = "", check_month = "", check_day = ""):
+    if check_year == "":
         check_year = str(now.year)
-        check_month = str(now.month)
-        list_date = {check_year:{check_month:{str(now.day):{"AM":[], "PM":[]}}}}
+    if check_month == "":
+        count_month = 1
+        while (count_month <= 12):
+            list_date[check_year][str(count_month)] = {}
+            count_day = 1
+            while (count_day < calendar.mdays[count_month]):
+                list_date[check_year][str(count_month)][str(count_day)] = {"AM":[], "PM":[]}
+                count_day = count_day + 1
+            count_month = count_month + 1
     else:
-        check_year = str(args[0])
-        list_date[check_year] = {}
-        if len(args) > 1:
-            check_month = str(args[1])
-            if len(args) > 2:
-                list_date = {check_year:{check_month:{args[2]:{"AM":[], "PM":[]}}}}
-            else:
-                list_date = {check_year:{check_month:{}}}
-                count = 1
-                while (count < calendar.mdays[int(check_month)]):
-                    list_date[check_year][check_month][str(count)] = {"AM":[], "PM":[]}
-                    count = count + 1
+        if check_day != "":
+            list_date = {check_year:{check_month:{check_day:{"AM":[], "PM":[]}}}}
         else:
+            list_date = {check_year:{check_month:{}}}
             count = 1
-            while (count <= 12):
-                list_date[check_year][str(count)] = {}
-                count_day = 1
-                while (count_day < calendar.mdays[count]):
-                    list_date[check_year][str(count)][str(count_day)] = {"AM":[], "PM":[]}
-                    count_day = count_day + 1
+            while (count < calendar.mdays[int(check_month)]):
+                list_date[check_year][check_month][str(count)] = {"AM":[], "PM":[]}
                 count = count + 1
     print("=============list_date init=============")
     print(list_date)
@@ -95,9 +85,6 @@ if __name__ == "__main__":
     #print(persons)
     leaves = eval(open_file(leaveFilePath))	
     #print(leaves)
-    #sys.exit(0)
-    
-    t = time.time()
     
     sel_data = getCheckInData(list_date)
     #sel_data = {"2018": {"2": {"9": {'AM': [], 'PM': []}}}}
@@ -120,7 +107,7 @@ if __name__ == "__main__":
                     list_date[check_year][month][day][ssn] = 0 #"Holiday"
                     continue
                     
-                if leaves.has_key(ssn) and leaves[ssn] != "":            
+                if ssn in leaves and leaves[ssn] != "":            
                     if check_day_time - time.mktime(datetime.strptime(leaves[ssn]["From"], "%Y-%m-%d").timetuple()) >= 0 and check_day_time - time.mktime(datetime.strptime(leaves[ssn]["To"], "%Y-%m-%d").timetuple()) <= 0:
                         list_date[check_year][month][day][ssn] = 1 #"Leave"
                         continue
@@ -142,17 +129,31 @@ if __name__ == "__main__":
     f = open(checkInFilePath, 'w')
     f.write(str(list_date))
     f.close()
-    
-    receivers = []
-    msg = ""
-    print('receivers:' + msg)
-    if len(receivers) > 0:
-        print('start reminder...')
-        try:
-            sendmail.mail_send(receivers)
-        except Exception, e:
-            print('send email error:' + str(e))
+    print("=============exported data=============")
 
+
+if __name__ == "__main__":
+    t = time.time()
+    
+    args = sys.argv[1:]
+    if not args:
+        print("not args")
+        check_year = ""
+        check_month = ""
+        check_day = ""
+    else:
+        check_year = str(args[0])
+        if len(args) > 1:
+            check_month = str(args[1])
+            if len(args) > 2:
+                check_day = str(args[2])
+            else:
+                check_day = ""
+        else:
+            check_month = ""
+    
+    getReportData(check_year, check_month, check_day)
+        
     print("total run time:")
     e = time.time()
     print(e-t)

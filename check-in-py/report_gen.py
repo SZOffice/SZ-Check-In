@@ -4,11 +4,11 @@ import os, sys, time
 from datetime import datetime
 from jinja2 import Template
 import sendmail
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 now = datetime.now()
 baseDir = 'check-in-data\\'
+if not os.path.exists(baseDir):
+    baseDir = sys.path[0] + '\\..\\check-in-data\\'
 checkInFilePath = baseDir + ('checkin.%s.json' % now.strftime('%Y%m%d'))
 templateFilePath = baseDir + "template.report.html"
 reportFilePath = baseDir + "check_in_report.html"
@@ -27,15 +27,9 @@ def open_file(path):
         file_object.close( )
     return context
 
-if __name__ == "__main__":
-    args = sys.argv[1:]
-    if not args:
-        print("not args")
-        
+def gen_report():
     list_check_in = eval(open_file(checkInFilePath))
     template_report = str(open_file(templateFilePath))
-    
-    t = time.time()
     
     template = Template(template_report)
     html = template.render(checkin = list_check_in)
@@ -51,8 +45,19 @@ if __name__ == "__main__":
         print('start send email...')
         try:
             sendmail.mail_send_report(receivers, msg, reportFilePath)
-        except Exception, e:
+        except Exception as e:
             print('send email error:' + str(e))
+
+    print("generated report")
+    
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    if not args:
+        print("not args")
+    
+    t = time.time()
+    
+    gen_report()
 
     print("total run time:")
     e = time.time()
