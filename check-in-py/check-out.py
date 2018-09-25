@@ -87,9 +87,12 @@ if __name__ == "__main__":
     msg = ""
     for person in persons:
         ssn = person["SSN"]
-        if person["id"] == last_check_out["idNum"]:            
-            receivers.append(ssn + "@seekasia.com")
-            msg += "<@" + ssn.lower() + "> "
+        if person["id"] == last_check_out["idNum"]:
+            slack = person["SSN"]
+            if person.has_key("Slack"):
+                slack = person["Slack"]
+            receivers.append(person["SSN"] + "@seekasia.com")
+            msg += "<@" + slack.lower() + "> "
             
     print('receivers:' + msg)
     if len(receivers) > 0:

@@ -84,8 +84,11 @@ if __name__ == "__main__":
     msg = ""
     for person in persons:
         if person["Checked"] == False:
+            slack = person["SSN"]
+            if person.has_key("Slack"):
+                slack = person["Slack"]
             receivers.append(person["SSN"] + "@seekasia.com")
-            msg += "<@" + person["SSN"].lower() + "> "
+            msg += "<@" + slack.lower() + "> "
     print('receivers:' + msg)
     if len(receivers) > 0:
         print('start reminder...')
