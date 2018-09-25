@@ -66,3 +66,14 @@ def mail_send_admin(message):
     smtpObj.sendmail(sender, ['miragelu@seekasia.com', 'candu@seekasia.com', 'echoliao@seekasia.com'], msg.as_string())  
     smtpObj.quit()  
     print('send mail finished...' )
+
+def mail_send3(subject, message, receivers):  
+    print('send mail start...')
+    msg = MIMEText(message, 'plain', 'utf-8')
+    msg["From"] = 'SZ-OA@seekasia.com'  
+    msg["To"] = ""  
+    msg["Subject"] = subject 
+    smtpObj = smtplib.SMTP("10.101.1.52")
+    smtpObj.sendmail(sender, receivers, msg.as_string())
+    smtpObj.quit()  
+    print('send mail finished...' )

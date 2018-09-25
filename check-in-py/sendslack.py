@@ -12,9 +12,9 @@ def slack_send(msg):
 	  channel="#sz-check-in",
 	  text=msg
 	)
-	if response["error"] != "":
+	if response.has_key("error") and response["error"] != "":
 		print('send slack error:' + response["error"])
 	else:
-		print('send slack finished...')
+		print 'send slack finished...'  
 
 #response = sc.api_call("chat.postMessage", channel="#rc_monitor", text="<@jacky_liao>, <@miragelu>, <@candu>, <@mervynlin>")
