@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-  
 import win32com.client
-import os, sys, time
+import os, sys, time, random
 from datetime import datetime
 import sendmail
 import sendslack
@@ -98,7 +98,13 @@ if __name__ == "__main__":
             print('send email error:' + str(e))
 
         try:
-            sendslack.slack_send("Hi, " + msg + " 你们早上没打卡, 请补打!")
+            tips = ["{0} 虽然没有全勤奖，但是来了就请打个卡呗！", 
+					"{0} 上班不打卡，你三老爷他大舅知道不？反正本AI已经知道了。", 
+					"本日最佳忘性奖获得者: {0} 连早卡都没打, 还想不想要工资了!", 
+					"试问SZOffice谁最浪? 那可非{0}莫属，浪起来可是连早卡都不打.", 
+					"{0} Bug什么时候都可以写，麻烦先把早卡打了去！"]
+            tip = tips[random.randrange(0, len(tips))]
+            sendslack.slack_send(tip.replace("{0}", msg))
         except Exception, e:
             print('send email error:' + str(e))
             

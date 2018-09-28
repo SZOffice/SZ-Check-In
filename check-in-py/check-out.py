@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-  
 import win32com.client
-import os, sys, time, datetime
+import os, sys, time, datetime, random
 import sendmail
 import sendslack
 reload(sys)
@@ -52,7 +52,7 @@ def get_last_workday(date, leaves):
     
     if date_str in leaves["Holiday"]:   #holiday        
         date = get_last_workday(yesterday, leaves)
-    if (weekIndex == 5 or weekIndex == 6) and (date_str not in leaves["Work"]):        
+    if (date_weekIndex == 5 or date_weekIndex == 6) and (date_str not in leaves["Work"]):        
         date = get_last_workday(yesterday, leaves)
     
     return date;
@@ -103,7 +103,14 @@ if __name__ == "__main__":
             print('send email error:' + str(e))
 
         try:
-            sendslack.slack_send("Hi, " + msg + " 本探根据蛛丝马迹发现昨儿u最晚下班，那么问题来了，钥匙归回原位否？!")
+            tips = ["{0} 虽然加班再晚也无奖金，不过钥匙还是得交出来滴。", 
+					"最佳晚归奖获得者: {0} 公司是你家, 你爱你家, 但是请记住钥匙是大家的!", 
+					"下班不回家，思想有问题。 {0} 赶快交出钥匙再去写个Bug压压惊", 
+					"{0} 加班那么晚，让其他同事情何以堪？交出钥匙继续写Bug去", 
+					"{0} 如果加班就能拿优秀员工的话，那么请把钥匙留下，让我来!", 
+					"{0} 加班不过是一个程序猿/媛的基本操作. 但是本AI只管钥匙, 无视操作"]
+            tip = tips[random.randrange(0, len(tips))]
+            sendslack.slack_send(tip.replace("{0}", msg))
         except Exception, e:
             print('send email error:' + str(e))
             
