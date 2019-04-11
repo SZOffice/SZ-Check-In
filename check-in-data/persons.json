@@ -6,8 +6,6 @@
     {'id':6, 'SSN': 'SamWang', 'Checked': False, 'Slack': 'Sam'},
     {'id':7, 'SSN': 'KevinMa', 'Checked': False},
     
-    {'id':8, 'SSN': 'EchoLiao', 'Checked': False},
-    {'id':40, 'SSN': 'CindyChen', 'Checked': False},
     {'id':9, 'SSN': 'DarrenWu', 'Checked': False},
     {'id':13, 'SSN': 'WolfZhang', 'Checked': False},
     
@@ -24,5 +22,6 @@
 
     {'id':36, 'SSN': 'KidyLuo', 'Checked': False},
     {'id':38, 'SSN': 'DerekZhan', 'Checked': False},
-    {'id':39, 'SSN': 'CrystalZhong', 'Checked': False}
+    {'id':39, 'SSN': 'CrystalZhong', 'Checked': False},
+    {'id':41, 'SSN': 'EveyWu', 'Checked': False}
 ]
